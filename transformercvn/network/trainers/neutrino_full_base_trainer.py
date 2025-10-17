@@ -149,7 +149,7 @@ class NeutrinoFullBaseTrainer(NeutrinoBase, ABC):
         if self.gamma == 0:
             return F.cross_entropy(logits, targets)
 
-        one_hot_targets = F.one_hot(targets, logits.shape[1]) > 0.5
+        one_hot_targets = F.one_hot(targets.to(torch.int64), logits.shape[1]) > 0.5
         log_probabilities = torch.log_softmax(logits, dim=-1)
         probabilities = torch.softmax(logits, dim=-1)
 

@@ -124,12 +124,13 @@ class MinkowskiDataset(Dataset):
         self.event_targets = torch.from_numpy(file["event_target"][self.min_limit:self.max_limit])
         self.prong_targets = torch.from_numpy(file["prong_target"][self.min_limit:self.max_limit])
 
+        #0,1 mu; 4,5, e; 8,9, tau; 13, nc; 1000180416, nnbar
         if event_current_targets:
             current_targets = np.zeros_like(self.event_targets)
-            current_targets[(self.event_targets > 3) & (self.event_targets <= 7)] = 1
-            current_targets[self.event_targets == 8] = 2
-            current_targets[self.event_targets == 9] = 3
-
+            current_targets[(self.event_targets <= 1)] = 1
+            current_targets[(self.event_targets <= 5) & (self.event_targets > 1)] = 2
+            current_targets[self.event_targets > 20] = 3
+            
             self.event_targets = torch.from_numpy(current_targets)
 
         # -----------------------------
